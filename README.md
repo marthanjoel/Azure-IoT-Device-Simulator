@@ -85,6 +85,8 @@ Supports multiple devices and multiple telemetry fields
 
 
 --
+
+
 ##Future Improvements
 Add support for string and Boolean telemetry types
 
@@ -95,8 +97,9 @@ Add authentication, error handling, and logging features
 Extend to Azure Functions for scheduled telemetry generation
 
 
---
-##iles & Structure
+----
+
+##Files & Structure
 bash
 Copy code
 Azure-IoT-Central-Device-Simulator/
