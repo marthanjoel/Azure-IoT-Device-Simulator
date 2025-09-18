@@ -1,4 +1,4 @@
-# Project Title: Azure IoT Central Device Simulator
+# Project Title: Azure IoT  Device Simulator
 
 ## Objective
 This project simulates multiple IoT devices sending telemetry data to Azure IoT Central. It allows testing dashboards, alerts, and device behavior without needing physical devices.
