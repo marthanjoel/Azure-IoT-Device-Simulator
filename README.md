@@ -1,282 +1,106 @@
-# How to use
-1. Install Python 3.7 or higher 
-2. Execute 'python3 -m pip install iotc' (or generate an environment if you are a 'advanced' python user and do it on there)
-3. Edit the 'number_of_messages' variable in 'iotc-data-importer.py' to set the number of telemetry messages sent per IoT Devices.
-4. Create or edit the file called 'iotc-data-dtdls.json' which contains an array of DTDL's. There's 3 custom fields to be added (see last section for a full example):
-- custom_device_scope: The IoT Central device scope
-- custom_device_id: The IoT Central device id
-- custom_device_key: The IoT Central primary or secondary key
-4. Run the python file using the command 'python3 iotc-data-importer.py'
-5. (Optional) Run the script on an azure function or something alike to set it up on a time interval.
+# Project Title: Azure IoT Central Device Simulator
 
-# Limitations
-Currently only the double and integer telemetry fields are supported. Any others will fail. You can easily extend this in the 'generate_data' method on the 'IoTDeviceField' class.
+## Objective
+This project simulates multiple IoT devices sending telemetry data to Azure IoT Central. It allows testing dashboards, alerts, and device behavior without needing physical devices.
 
-# Sample iotc-data-dtdls.json file
-```
-[{
-    "custom_device_scope": "0ne00AD32A9",
-    "custom_device_id": "27y100t1y2c",
-    "custom_device_key": "nJbjlInYNyDrQ2CFldfB+GFOt0tqL52pMdJSdm7VIsk=",
-    "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd;1",
+---
+
+## Tools & Technologies
+
+- **Language**: Python 3.7+
+- **Frameworks / Libraries**: iotc (Azure IoT Central Python SDK), Tkinter (for GUI simulation)
+- **Simulator**: Custom Python script generating telemetry
+- **Dependencies**: Listed in `requirements.txt` (optional: `iotc` package)
+
+---
+
+## Setup Instructions
+
+### 1. Clone the Repository
+git clone https://github.com/marthanjoel/Azure-IoT-Central-Device-Simulator.git
+cd Azure-IoT-Central-Device-Simulator
+2. Create Virtual Environment (Optional)
+bash
+Copy code
+python3 -m venv venv
+source venv/bin/activate
+3. Install Dependencies
+bash
+Copy code
+python3 -m pip install iotc
+4. Configure Devices
+Edit iotc-data-dtdls.json to include your IoT Central devices:
+
+json
+Copy code
+[
+  {
+    "custom_device_scope": "YourDeviceScope",
+    "custom_device_id": "Device01",
+    "custom_device_key": "YourDeviceKey",
+    "@id": "dtmi:yourDevice;1",
     "@type": "Interface",
     "contents": [
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:ShuttleCycleTime;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Shuttle Cycle Time"
-            },
-            "name": "ShuttleCycleTime",
-            "schema": "double",
-            "decimalPlaces": 2,
-            "displayUnit": {
-                "en": "seconds"
-            },
-            "maxValue": 3,
-            "minValue": 1
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:ShuttleCycleRate;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Shuttle Cycle Rate"
-            },
-            "name": "ShuttleCycleRate",
-            "schema": "double",
-            "decimalPlaces": 2,
-            "displayUnit": {
-                "en": "per minute"
-            },
-            "maxValue": 30,
-            "minValue": 15
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:AverageTimeBetweenCycles;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Average Time Between Cycles"
-            },
-            "name": "AverageTimeBetweenCycles",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "milliseconds"
-            },
-            "maxValue": 2000,
-            "minValue": 0
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:AverageTotalOffsetMoveTime;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Average Total Offset Move Time"
-            },
-            "name": "AverageTotalOffsetMoveTime",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "milliseconds"
-            },
-            "maxValue": 2000,
-            "minValue": 0
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:AverageSettlingTime;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Average Settling Time"
-            },
-            "name": "AverageSettlingTime",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "milliseconds"
-            },
-            "maxValue": 50,
-            "minValue": 0
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:AverageMoveTimeFromLastTarget;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Average Move Time From Last Target"
-            },
-            "name": "AverageMoveTimeFromLastTarget",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "milliseconds"
-            },
-            "maxValue": 1500,
-            "minValue": 100
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:LastShuffleID;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Last Shuffle ID"
-            },
-            "name": "LastShuffleID",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "maxValue": 9,
-            "minValue": 1
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:LastTimeBetweenShuttles;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Last Time Between Shuttles"
-            },
-            "name": "LastTimeBetweenShuttles",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "milliseconds"
-            },
-            "maxValue": 2500,
-            "minValue": 200
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:LastTotalOffsetMoveTime;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Last Total Offset Move Time"
-            },
-            "name": "LastTotalOffsetMoveTime",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "milliseconds"
-            },
-            "maxValue": 2000,
-            "minValue": 200
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:LastTotalDwellTime;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Last Total Dwell Time"
-            },
-            "name": "LastTotalDwellTime",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "milliseconds"
-            },
-            "maxValue": 2000,
-            "minValue": 1
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:LastSettlingTime;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Last Settling Time"
-            },
-            "name": "LastSettlingTime",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "milliseconds"
-            },
-            "maxValue": 50,
-            "minValue": 1
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:LastMoveTimeFromLastTarget;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Last Move Time From Last Target"
-            },
-            "name": "LastMoveTimeFromLastTarget",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "milliseconds"
-            },
-            "maxValue": 2500,
-            "minValue": 200
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:PeakPowerSupplyLoad;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Peak Power Supply Load"
-            },
-            "name": "PeakPowerSupplyLoad",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "Watt"
-            },
-            "maxValue": 800,
-            "minValue": 200
-        },
-        {
-            "@id": "dtmi:iotcFactsDevWeu001:SuperTrackSection_2zd:AveragePower;1",
-            "@type": [
-                "Telemetry",
-                "NumberValue"
-            ],
-            "displayName": {
-                "en": "Average Power"
-            },
-            "name": "AveragePower",
-            "schema": "integer",
-            "decimalPlaces": 0,
-            "displayUnit": {
-                "en": "Watt"
-            },
-            "maxValue": 800,
-            "minValue": 200
-        }
-    ],
-    "displayName": {
-        "en": "SuperTrack Section "
-    },
-    "@context": [
-        "dtmi:iotcentral:context;2",
-        "dtmi:dtdl:context;2"
+      {
+        "@id": "dtmi:yourDevice:Temperature;1",
+        "@type": ["Telemetry","NumberValue"],
+        "name": "Temperature",
+        "schema": "double",
+        "minValue": 20,
+        "maxValue": 30,
+        "decimalPlaces": 2,
+        "displayName": {"en": "Temperature"}
+      }
     ]
-}]
-```
+  }
+]
+5. Run the Simulator
+bash
+Copy code
+python3 iotc-data-importer.py
+(Optional) Run simulator_gui.py for a Tkinter-based GUI to visualize telemetry messages.
+
+Simulation Details
+Sensor Emulated: Temperature, Humidity, Pressure (configurable)
+
+Logic: Random telemetry generated within min/max ranges
+
+Device Count: Multiple devices supported via JSON configuration
+
+
+--
+##Screenshots
+Screenshot 1: <img width="1255" height="731" alt="Screenshot from 2025-09-18 09-30-20" src="https://github.com/user-attachments/assets/3ce16975-c4be-4b2f-8f4c-7397b791a14f" />
+
+Screenshot 2: <img width="1255" height="731" alt="Screenshot from 2025-09-18 09-31-21" src="https://github.com/user-attachments/assets/af51b9a5-86e6-44a5-b5da-55d3df2f8097" />
+
+
+--
+##Observations
+Simulator generates realistic telemetry for testing dashboards
+
+GUI allows manual and batch telemetry sending
+
+Supports multiple devices and multiple telemetry fields
+
+
+--
+##Future Improvements
+Add support for string and Boolean telemetry types
+
+Enable real-time IoT Central telemetry updates from GUI
+
+Add authentication, error handling, and logging features
+
+Extend to Azure Functions for scheduled telemetry generation
+
+
+--
+##iles & Structure
+bash
+Copy code
+Azure-IoT-Central-Device-Simulator/
+├── iotc-data-importer.py    
+├── iotc-data-dtdls.json     
+├── simulator_gui.py         ├── requirements.txt         # Python dependencies
+└── README.md                # Project documentation
